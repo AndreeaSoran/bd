@@ -1,0 +1,39 @@
+ class OkListener4a implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int pret;
+            String nume;
+            try{
+                pret = view.getPret();
+                nume = view.numeInput.getText();
+                System.out.println(pret);
+                DBConnection connect = new DBConnection();
+                connect.get4a(nume, pret);
+
+            }
+            catch(NumberFormatException ex)
+            {
+                view.displayErrorMessage("WRONG!");
+            }
+        }
+    }
+ 
+ public void get4a(String nume, int pret)
+    {
+
+        try{
+            String query = "SELECT f.numef as numef, pret FROM furnizori f JOIN catalog c ON (f.idf = c.idf) JOIN piese p ON (p.idp = c.idp) WHERE p.numep = "+nume+" AND pret<"+pret+";";
+            rs = st.executeQuery(query);
+            System.out.println("Records from database:");
+            while(rs.next())
+            {
+                String numef = rs.getString("numef");
+                int prt = rs.getInt("pret");
+                System.out.println("Numef: "+numef + "pret:"+prt);
+            }
+
+        }catch(Exception ex){
+            System.out.println(ex);
+        }
+    }
